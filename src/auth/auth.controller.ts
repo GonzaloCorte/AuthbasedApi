@@ -27,7 +27,6 @@ export class AuthController {
         
         return {
             msg: 'User successfully registered',
-            userId: result.id,
             username: result.username,
         }
     }
@@ -38,8 +37,7 @@ export class AuthController {
         if (req.session) {
             console.log("Already logged in")
         }
-        return {user: req.user,
-                msg: 'user logged in'};
+        return { msg: 'user logged in'};
     }
 
     @UseGuards(JwtGuard)
