@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -27,11 +27,15 @@ import { JwtModule } from '@nestjs/jwt';
         EMAIL_CONFIRMATION_URL: Joi.string().required(),
       })
     }),
+    MongooseModule.forRootAsync({
+      imports:[ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+      }),
+      inject:[ConfigService],
+    }),
     UsersModule,
     AuthModule,
-    MongooseModule.forRoot(
-      'mongodb+srv://administrator:H1Uubiqicj5oUPn8@cluster0.tmxg224.mongodb.net/?retryWrites=true&w=majority'
-    ),
     EmailModule,
     EmailValidationModule,
     JwtModule,
