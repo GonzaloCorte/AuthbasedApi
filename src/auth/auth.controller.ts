@@ -34,9 +34,6 @@ export class AuthController {
     @UseGuards(LocalAuthGuard)
     @Post('/login')
     login(@Request() req): any {
-        if (req.session) {
-            console.log("Already logged in")
-        }
         return { msg: 'user logged in'};
     }
 

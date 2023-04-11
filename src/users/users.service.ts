@@ -23,8 +23,12 @@ export class UsersService {
             password: hashedPassword,
             active: false,
         });
-        await newUser.save();
-
+        try {
+            await newUser.save();
+        }catch(e) {
+            console.log(e);
+            return null;
+        }
 
         return newUser;
     }
