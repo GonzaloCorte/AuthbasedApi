@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class JwtokenService {
@@ -11,7 +12,7 @@ export class JwtokenService {
     ) {}
 
     generateJwt(username: string): string {
-        const payload: VerificationTokenPayload  = { username };
+        const payload: VerificationTokenPayload  = { username, id: uuidv4() };
         const token = this.jwtService.sign(payload, {
             secret: this.configService.get('JWT_VERIFICATION_TOKEN_SECRET'),
             expiresIn: `${this.configService.get('JWT_VERIFICATION_TOKEN_EXPIRATION_TIME')}s`
@@ -26,7 +27,6 @@ export class JwtokenService {
             const payload = await this.jwtService.verify(token, {
                 secret: this.configService.get('JWT_VERIFICATION_TOKEN_SECRET'),
             });
-            console.log(payload);
             if (typeof payload === 'object' && 'username' in payload) {
                 return payload.username;
             }
@@ -43,4 +43,5 @@ export class JwtokenService {
 
 export interface VerificationTokenPayload {
     username: string;
+    id: string;
 }

@@ -26,8 +26,11 @@ export class UsersService {
         try {
             await newUser.save();
         }catch(e) {
+            if (e?.code == 11000) {
+                throw new Error('username already in use');
+            }
             console.log(e);
-            return null;
+            throw new Error(e)
         }
 
         return newUser;

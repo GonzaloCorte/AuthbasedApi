@@ -35,7 +35,7 @@ export class EmailValidationService {
 
         return this.emailService.sendMail({
             to: email,
-            subject: 'Email activation',
+            subject: 'email verification',
             text,
         });
     }

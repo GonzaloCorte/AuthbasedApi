@@ -3,10 +3,14 @@ import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { BadRequestException } from '@nestjs/common/exceptions';
 import { v4 as uuidv4 } from 'uuid';
+import { JwtokenService } from 'src/jwtoken/jwtoken.service';
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly userService: UsersService) {}
+    constructor(
+        private readonly userService: UsersService,
+        private readonly jwtokenService: JwtokenService
+        ) {}
 
     async validateUser(username: string, password: string): Promise<any> {
         username = username.toString().toLowerCase();
@@ -30,5 +34,11 @@ export class AuthService {
             throw new BadRequestException('username or password not valid')
         }
         return true
+    }
+
+    async login(user: any) {
+        return {
+            access_token: this.jwtokenService.generateJwt(user.username)
+        }
     }
 }

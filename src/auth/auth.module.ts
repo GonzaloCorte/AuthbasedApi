@@ -10,7 +10,7 @@ import { JwtokenModule } from 'src/jwtoken/jwtoken.module';
 
 @Module({
   imports: [PassportModule.register({ session: true }),EmailValidationModule, UsersModule, JwtokenModule],
-  providers: [AuthService, LocalStrategy, SessionSerializer],
+  providers: [AuthService, LocalStrategy, SessionSerializer, JwtokenModule],
   controllers: [AuthController]
 })
 export class AuthModule {}

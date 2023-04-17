@@ -3,13 +3,10 @@ import { AuthGuard } from "@nestjs/passport"
 
 @Injectable()
 export class LocalAuthGuard extends AuthGuard("local") {
-    async canActivate(context: ExecutionContext) {
+    async canActivate(context: ExecutionContext): Promise<boolean> {
         const result = (await super.canActivate(context)) as boolean;
-        const request = context.switchToHttp().getRequest();
-        if (request.session?.passport) {
-            throw new BadRequestException('there is a session running in, first log out')
-        }
-        await super.logIn(request);
+        const req = context.switchToHttp().getRequest();
+        await super.logIn(req);
        
         return result;
     }
